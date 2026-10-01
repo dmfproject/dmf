@@ -78,7 +78,7 @@ Content folders under `public/` are in `.gitignore`, so card images and texts ca
 
 ## Publish
 
-Push to `main`. The GitHub Actions workflow in `.github/workflows/deploy.yml` builds the site and publishes it to GitHub Pages. One-time setup:
+Push to `master`. The GitHub Actions workflow in `.github/workflows/deploy.yml` builds the site and publishes it to GitHub Pages. One-time setup:
 
 - **Settings > Pages > Source**: **GitHub Actions**
 - **Settings > Secrets and variables > Actions > Variables**: add `FILE_SERVER` with the file server's public URL (the hosted admin repo)
