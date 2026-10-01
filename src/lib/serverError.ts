@@ -8,5 +8,5 @@ export function goToServerError(router: { replace: (href: string) => void }) {
   } catch {
     /* storage blocked: "Try again" goes home */
   }
-  router.replace('/500/');
+  router.replace('/server-error/');
 }

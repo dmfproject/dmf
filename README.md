@@ -67,7 +67,7 @@ Pages with nothing to show yet say so instead of showing an empty page: Decks an
 
 | Where | What |
 | --- | --- |
-| `src/app/` | the routes: `/`, `/decks`, `/deck`, `/errata`, `/rulings`, `/download`, `/500`, 404 |
+| `src/app/` | the routes: `/`, `/decks`, `/deck`, `/errata`, `/rulings`, `/download`, `/server-error` (the 500 page), 404 |
 | `src/components/pages/` | each page's loader (fetches from the file server, then renders the view) |
 | `src/components/` | views and shared pieces (`LoadingScreen`, `Decor`, `Markdown`, cards, decks) |
 | `src/lib/fileServer.ts` | all file server access |

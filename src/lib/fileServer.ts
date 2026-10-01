@@ -9,7 +9,7 @@ const RAW = process.env.NEXT_PUBLIC_FILE_SERVER || process.env.FILE_SERVER || ''
 /** File server URL without a trailing slash. */
 export const FILE_SERVER = RAW.replace(/\/+$/, '');
 
-/** The file server can't be reached, or answered with a server error. Pages show /500/ for it. */
+/** The file server can't be reached, or answered with a server error. Pages show /server-error/ for it. */
 export class FileServerError extends Error {}
 
 /** Full URL of a file on the file server: fileUrl('cards/123.jpg') */
