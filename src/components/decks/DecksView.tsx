@@ -27,7 +27,7 @@ export default function DecksView({ decks, updates }: { decks: Deck[]; updates: 
         }}
       >
         <Container maxWidth={PAGE_MAX_WIDTH}>
-          <SlashLabel>The DMF pool</SlashLabel>
+          <SlashLabel>The Vault Format pool</SlashLabel>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 3, flexWrap: 'wrap' }}>
             <GradientTitle variant="h1" component="h1" sx={{ fontSize: PAGE_TITLE_SIZE }}>
               Decks
@@ -41,7 +41,7 @@ export default function DecksView({ decks, updates }: { decks: Deck[]; updates: 
           </Box>
           <GlitchDivider />
           {decks.length === 0 ? (
-            <ComingSoon title="Still shuffling" text="The first DMF decks are on the testing table, duel after duel, until every one of them can beat every other. They join the pool soon." />
+            <ComingSoon title="Still shuffling" text="The first Vault Format decks are on the testing table, duel after duel, until every one of them can beat every other. They join the pool soon." />
           ) : (
             <Box sx={{ mt: 5 }}>
               <UpdatesSection updates={updates} />

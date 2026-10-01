@@ -1,6 +1,6 @@
-# DMF Web
+# Vault Format Web
 
-The public website for DMF, a fixed-format Yu-Gi-Oh! with premade decks. Built with Next.js (App Router) and Material UI, and published as a static site on GitHub Pages.
+The public website for Vault Format, a fixed-format Yu-Gi-Oh! with premade decks. Built with Next.js (App Router) and Material UI, and published as a static site on GitHub Pages.
 
 The site holds **no content of its own**. Decks, card images and texts, covers, the `.json`/`.md` files and the EDOPro pack live on a **file server**: the private admin repo (`dmf_admin`), which also has the admin pages for adding and editing all of it. Every page loads its content from there in the browser, on every visit, so content changes show up right away without rebuilding this site.
 
@@ -37,9 +37,9 @@ npm run preview    # serve out/ on http://localhost:4173
 | Deck lists | `decks/<deck_id>.ydk` |
 | Card images and texts | `cards/<card_id>.jpg`, `card_texts/<card_id>.txt` |
 | Deck covers | `covers/<card_id>.jpg`, `covers/crops/<deck>--<card>-<x>-<y>-<size>.jpg` |
-| EDOPro pack | `downloads/dmf_edopro.json` + the zip it names |
+| EDOPro pack | `downloads/vault_format_edopro.json` + the zip it names |
 
-The file server must allow other sites to read these files (CORS); `dmf_admin` does. Cards with ids `900000000`-`900009999` are **DMF errata**; the Errata page lists every one used in a deck.
+The file server must allow other sites to read these files (CORS); `dmf_admin` does. Cards with ids `900000000`-`900009999` are **Vault Format errata**; the Errata page lists every one used in a deck.
 
 Pages with nothing to show yet say so instead of showing an empty page: Decks and Errata with no decks, Errata with no errata cards, Download with no decks or no archive.
 
@@ -59,7 +59,7 @@ Pages with nothing to show yet say so instead of showing an empty page: Decks an
 
 **Card texts (`card_texts/<card_id>.txt`):** a line of only dashes (`---`) is shown as a divider, e.g. between a Spellform card's spell and monster effects.
 
-**Rules PDF:** the Rulings page's **Download rules** button turns `rulings.md` into a PDF in the browser, named `DMF_rules_<version>.pdf` from the `Version 1.0` line. Change that line when the rules change.
+**Rules PDF:** the Rulings page's **Download rules** button turns `rulings.md` into a PDF in the browser, named `Vault_Format_rules_<version>.pdf` from the `Version 1.0` line. Change that line when the rules change.
 
 **New tag and update note:** decks from the **latest** update show **New** for 30 days after its date, and the Main page shows a note about that update for the same 30 days. Neither shows while there's only one update.
 

@@ -57,10 +57,10 @@ function usePanelHeight(enabled: boolean) {
   return { ref, height };
 }
 
-/** Cards with ids 900000000–900009999 are DMF errata (modified versions of official cards). */
+/** Cards with ids 900000000–900009999 are Vault Format errata (modified versions of official cards). */
 export const isErrata = (card: string) => /^90000\d{4}$/.test(card);
 
-/** Small "DMF" tag shown on erratum cards in the grid. */
+/** Small "Vault Format" tag shown on erratum cards in the grid. */
 function ErrataTag() {
   return (
     <Box
@@ -82,7 +82,7 @@ function ErrataTag() {
         pointerEvents: 'none',
       }}
     >
-      DMF
+      VAULT
     </Box>
   );
 }
@@ -125,13 +125,13 @@ function ErrataBanner() {
       }}
     >
       <Typography sx={{ fontFamily: fonts.display, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: dmf.orange, fontSize: '0.9rem' }}>
-        DMF erratum{' '}
+        Vault Format erratum{' '}
         <Box component="span" sx={{ color: dmf.ice }}>
           {'//'}
         </Box>
       </Typography>
       <Typography sx={{ fontSize: '0.85rem', color: dmf.textMuted, mt: 0.25 }}>
-        Modified for DMF. This is not the official version of the card.
+        Modified for Vault Format. This is not the official version of the card.
       </Typography>
     </Box>
   );
@@ -313,7 +313,7 @@ function Section({
                 component="button"
                 type="button"
                 onClick={() => onSelect({ section: key, index, card })}
-                aria-label={`Show card ${card}${isErrata(card) ? ' (DMF erratum)' : ''}`}
+                aria-label={`Show card ${card}${isErrata(card) ? ' (Vault Format erratum)' : ''}`}
                 aria-pressed={active}
                 sx={{
                   p: 0,
@@ -347,7 +347,7 @@ export default function CardBrowser({
   errataTags = true,
 }: Omit<Lookup, 'texts'> & {
   sections: CardSection[];
-  /** Show the small "DMF" tag on erratum cards (off on the errata page, where every card is one). */
+  /** Show the small "Vault Format" tag on erratum cards (off on the errata page, where every card is one). */
   errataTags?: boolean;
 }) {
   const theme = useTheme();

@@ -17,7 +17,7 @@ export default function DeckPage() {
   const deck = useContent(() => getDeckList(id).then((d) => ({ d })), [id]);
 
   useEffect(() => {
-    if (deck?.d) document.title = `${deck.d.title} · Yu-Gi-Oh! DMF`;
+    if (deck?.d) document.title = `${deck.d.title} · Yu-Gi-Oh! Vault Format`;
   }, [deck]);
 
   if (!deck) return <PageLoading />;

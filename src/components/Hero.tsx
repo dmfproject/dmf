@@ -61,7 +61,7 @@ export default function Hero({
           pointerEvents: "none",
         }}
       >
-        DMF
+        VAULT
       </Typography>
 
       <Container maxWidth="lg" sx={{ position: "relative" }}>

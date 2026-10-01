@@ -14,9 +14,9 @@ const body = Work_Sans({ subsets: ['latin'], style: ['normal', 'italic'], variab
 const ui = Montserrat({ subsets: ['latin'], weight: ['500', '600', '700'], variable: '--font-ui' });
 
 export const metadata: Metadata = {
-  title: { default: 'Yu-Gi-Oh! DMF', template: '%s · Yu-Gi-Oh! DMF' },
+  title: { default: 'Yu-Gi-Oh! Vault Format', template: '%s · Yu-Gi-Oh! Vault Format' },
   description:
-    'Yugioh DMF (Yu-Gi-Oh! Duel Monsters Format): a fixed Yu-Gi-Oh! format with premade, balanced decks, DMF card errata and an EDOPro pack.',
+    'Yu-Gi-Oh! Vault Format (Yugioh Vault Format): a fixed Yu-Gi-Oh! format with premade, balanced decks, Vault Format card errata and an EDOPro pack.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

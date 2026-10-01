@@ -24,7 +24,7 @@ function Logo() {
     <Box
       component={NextLink}
       href="/"
-      aria-label="DMF home"
+      aria-label="Vault Format home"
       sx={{ display: 'flex', alignItems: 'center', gap: 1.25, textDecoration: 'none', mr: 'auto' }}
     >
       <Box
@@ -52,7 +52,7 @@ function Logo() {
           color: 'transparent',
         }}
       >
-        DMF
+        VAULT FORMAT
       </Box>
     </Box>
   );

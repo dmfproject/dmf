@@ -20,7 +20,7 @@ export default function PhilosophyView({ markdown, cards = null, news = null }: 
   return (
     <>
       {news && <UpdateNote news={news} />}
-      <Hero title={page.title || 'DMF'} intro={page.intro} cards={cards} />
+      <Hero title={page.title || 'Vault Format'} intro={page.intro} cards={cards} />
       {page.sections.map((s, i) => (
         <SectionBand
           key={s.id}

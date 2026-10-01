@@ -52,11 +52,11 @@ export default function DownloadView({ pack, inDevelopment = false }: { pack: Pa
         </GradientTitle>
         <GlitchDivider />
         <Typography sx={{ color: dmf.textMuted, maxWidth: 640 }}>
-          Play DMF in EDOPro. One archive with every DMF deck and all DMF card errata, scripts included.
+          Play Vault Format in EDOPro. One archive with every Vault Format deck and all Vault Format card errata, scripts included.
         </Typography>
 
         {inDevelopment ? (
-          <ComingSoon title="Nothing to draw yet" text="The EDOPro pack with every DMF deck and erratum is still being put together. It gets dealt here soon." />
+          <ComingSoon title="Nothing to draw yet" text="The EDOPro pack with every Vault Format deck and erratum is still being put together. It gets dealt here soon." />
         ) : (
           <>
         {/* Download panel */}
@@ -89,7 +89,7 @@ export default function DownloadView({ pack, inDevelopment = false }: { pack: Pa
                   <Box component="span" sx={{ color: dmf.orange }}>
                     {'//'}
                   </Box>{' '}
-                  {pack.cards} DMF CARDS
+                  {pack.cards} VAULT FORMAT CARDS
                 </Typography>
               </Box>
               <NotchButton href={pack.url} download={pack.file}>
@@ -123,11 +123,11 @@ export default function DownloadView({ pack, inDevelopment = false }: { pack: Pa
             <Step n={4} title="Extract the archive into it">
               Extract the .zip straight into the EDOPro folder, so its <Folder>deck</Folder>, <Folder>expansions</Folder>,{' '}
               <Folder>pics</Folder> and <Folder>script</Folder> folders merge with the ones already there. If you&apos;re asked to replace files, choose
-              yes. Only DMF files are replaced.
+              yes. Only Vault Format files are replaced.
             </Step>
             <Step n={5} title="Restart EDOPro">
-              The DMF decks show up in the Deck Editor with names starting with <Folder>dmf_</Folder>. DMF erratum cards are
-              marked <b>~DMF erratum~</b> in their card text.
+              The Vault Format decks show up in the Deck Editor with names starting with <Folder>vault_format_</Folder>. Vault Format erratum cards are
+              marked <b>~Vault Format erratum~</b> in their card text.
             </Step>
           </Box>
         </Box>
@@ -135,8 +135,8 @@ export default function DownloadView({ pack, inDevelopment = false }: { pack: Pa
         {/* Notes */}
         <Box sx={{ mt: 6, maxWidth: 900, display: 'grid', gap: 2.5, gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' } }}>
           {[
-            ['Updating', 'When a new version comes out, download it and extract it the same way. It overwrites the old DMF files.'],
-            ['Playing with friends', 'Both players need the DMF pack installed to duel with DMF decks, since they use DMF erratum cards.'],
+            ['Updating', 'When a new version comes out, download it and extract it the same way. It overwrites the old Vault Format files.'],
+            ['Playing with friends', 'Both players need the Vault Format pack installed to duel with Vault Format decks, since they use Vault Format erratum cards.'],
           ].map(([title, text]) => (
             <Box key={title} sx={{ p: 2.5, borderLeft: `3px solid ${dmf.orange}`, bgcolor: 'rgba(255,138,61,0.06)' }}>
               <Typography sx={{ fontFamily: fonts.display, fontWeight: 700, textTransform: 'uppercase', color: dmf.text, mb: 0.5 }}>

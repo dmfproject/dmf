@@ -1,6 +1,6 @@
 import { fetchJson, fileUrl } from './fileServer';
 
-/** downloads/dmf_edopro.json on the file server (written by the admin's EDOPro pack build). */
+/** downloads/vault_format_edopro.json on the file server (written by the admin's EDOPro pack build). */
 type PackInfo = {
   file: string;
   /** yyyy-mm-dd */
@@ -23,7 +23,7 @@ export type Pack = {
 
 /** The current EDOPro pack, read from the file server when the site is built; null if there's none. */
 export async function getLatestPack(): Promise<Pack | null> {
-  const info = await fetchJson<PackInfo>('downloads/dmf_edopro.json');
+  const info = await fetchJson<PackInfo>('downloads/vault_format_edopro.json');
   if (!info || !info.file || !info.updated) return null;
   const [y, m, d] = info.updated.split('-');
   return {

@@ -407,7 +407,7 @@ function assemble(pages: string[][], title: string, footer: string): Uint8Array 
   // Title as UTF-16BE so any character survives in the document properties.
   let hex = 'FEFF';
   for (let i = 0; i < title.length; i++) hex += title.charCodeAt(i).toString(16).padStart(4, '0');
-  const info = add(`<< /Title <${hex}> /Producer (DMF) >>`);
+  const info = add(`<< /Title <${hex}> /Producer (Vault Format) >>`);
 
   let out = '%PDF-1.4\n%\xe2\xe3\xcf\xd3\n';
   const offsets: number[] = [];
@@ -581,16 +581,16 @@ export function markdownToPdf(markdown: string, { title, footer }: { title: stri
 
 /* ---- helpers for the page ----------------------------------------------------------------- */
 
-/** "1.0" from a line like "**Duel Monsters Format Rules** - Version 1.0", or null. */
+/** "1.0" from a line like "**Vault Format Rules** - Version 1.0", or null. */
 export function rulesVersion(markdown: string): string | null {
   const m = /\bversion\s*:?\s*v?(\d+(?:\.\d+)*[\w.-]*)/i.exec(markdown);
   return m ? m[1] : null;
 }
 
-/** Turn the markdown into a PDF and download it as DMF_rules_<version>.pdf. */
+/** Turn the markdown into a PDF and download it as Vault_Format_rules_<version>.pdf. */
 export function downloadRulesPdf(markdown: string, docTitle: string) {
   const version = rulesVersion(markdown);
-  const name = version ? `DMF_rules_${version}` : 'DMF_rules';
+  const name = version ? `Vault_Format_rules_${version}` : 'Vault_Format_rules';
   const bytes = markdownToPdf(markdown, {
     title: version ? `${docTitle} (v${version})` : docTitle,
     footer: version ? `${docTitle}  //  Version ${version}` : docTitle,

@@ -11,7 +11,7 @@ import ComingSoon from './ComingSoon';
 export default function ErrataView({ data, hasDecks }: { data: ErrataData; hasDecks: boolean }) {
   return (
     <PageShell>
-        <SlashLabel>DMF card changes</SlashLabel>
+        <SlashLabel>Vault Format card changes</SlashLabel>
         <GradientTitle variant="h1" component="h1" sx={{ fontSize: PAGE_TITLE_SIZE }}>
           Errata
         </GradientTitle>
@@ -24,7 +24,7 @@ export default function ErrataView({ data, hasDecks }: { data: ErrataData; hasDe
         )}
 
         {!hasDecks ? (
-          <ComingSoon title="Still shuffling" text="DMF errata come with the decks that use them. They show up here as soon as the first decks join the pool." />
+          <ComingSoon title="Still shuffling" text="Vault Format errata come with the decks that use them. They show up here as soon as the first decks join the pool." />
         ) : data.cards.length === 0 ? (
           <ComingSoon title="No errata yet" text="Every card in the current decks plays exactly as printed. Changed cards will show up here." />
         ) : (

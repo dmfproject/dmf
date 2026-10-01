@@ -62,7 +62,7 @@ export default function RulingsView({ markdown }: { markdown: string }) {
 
   return (
     <PageShell>
-        <SlashLabel>DMF rules</SlashLabel>
+        <SlashLabel>Vault Format rules</SlashLabel>
         <GradientTitle variant="h1" component="h1" sx={{ fontSize: PAGE_TITLE_SIZE }}>
           {page.title || 'Rulings'}
         </GradientTitle>
@@ -76,7 +76,7 @@ export default function RulingsView({ markdown }: { markdown: string }) {
 
         {markdown.trim() && (
           <Box sx={{ mt: 3, mb: 1 }}>
-            <NotchButton variant="ghost" onClick={() => downloadRulesPdf(markdown, page.title || 'DMF Rules')}>
+            <NotchButton variant="ghost" onClick={() => downloadRulesPdf(markdown, page.title || 'Vault Format Rules')}>
               Download rules{version ? ` v${version}` : ''} (PDF)
             </NotchButton>
           </Box>

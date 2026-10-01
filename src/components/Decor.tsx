@@ -34,14 +34,14 @@ export function GradientTitle({ sx, component = 'h2', ...props }: TypographyProp
   );
 }
 
-/** Slow blink of the DMF diamond (divider and header logo). */
+/** Slow blink of the Vault Format diamond (divider and header logo). */
 export const pulse = keyframes`
   0%, 100% { opacity: 1; }
   50% { opacity: 0.35; }
 `;
 
 /**
- * Heading underline: solid bar → "//" slashes → fading rail with ticks → DMF diamond.
+ * Heading underline: solid bar → "//" slashes → fading rail with ticks → Vault Format diamond.
  * Scales proportionally (no stretching), so the slashes and diamond keep their shape.
  */
 export function GlitchDivider({ color = dmf.orange, accent }: { color?: string; accent?: string }) {
@@ -80,7 +80,7 @@ export function GlitchDivider({ color = dmf.orange, accent }: { color?: string; 
         <rect x="370" y="5" width="2" height="6" fill={second} opacity="0.45" />
         <rect x="430" y="6" width="2" height="4" fill={second} opacity="0.35" />
 
-        {/* DMF diamond */}
+        {/* Vault Format diamond */}
         <polygon points="490,1 497,8 490,15 483,8" fill="none" stroke={second} strokeWidth="2" />
         <polygon className="dmf-pulse" points="490,5 493,8 490,11 487,8" fill={color} />
 
