@@ -16,6 +16,23 @@ import { dmf, fonts } from '@/theme';
 
 export type Tone = 'dark' | 'ice';
 
+type MdNode = { type: string; value?: string; children?: MdNode[] };
+
+/**
+ * `<br>` (also `<br/>`, `<br />`) in the markdown becomes a line break, also inside table cells.
+ * Other HTML stays ignored. (Plain markdown also has one: end a line with `\`.)
+ */
+function remarkBr() {
+  const walk = (node: MdNode) => {
+    if (!node.children) return;
+    node.children = node.children.map((child) =>
+      child.type === 'html' && /^<br\s*\/?>$/i.test((child.value ?? '').trim()) ? { type: 'break' } : child,
+    );
+    node.children.forEach(walk);
+  };
+  return (tree: MdNode) => walk(tree);
+}
+
 function palette(tone: Tone) {
   return tone === 'ice'
     ? { text: dmf.ink, muted: 'rgba(10,22,40,0.8)', accent: dmf.ink, strong: '#000', line: 'rgba(10,22,40,0.25)' }
@@ -192,7 +209,7 @@ const cache: Partial<Record<Tone, Components>> = {};
 export default function Markdown({ children, tone = 'dark' }: { children: string; tone?: Tone }) {
   const components = (cache[tone] ??= buildComponents(tone));
   return (
-    <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+    <ReactMarkdown remarkPlugins={[remarkGfm, remarkBr]} components={components}>
       {children}
     </ReactMarkdown>
   );
