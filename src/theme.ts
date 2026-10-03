@@ -50,6 +50,13 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        // Phones (under 600px): every font size is 15% smaller. All sizes are in rem, so scaling the
+        // root size scales them all; spacing is in px and stays the same.
+        '@media (max-width: 599.95px)': {
+          html: { fontSize: '85%' },
+          // ...but text fields stay at least 16px, or iOS zooms in when you tap them
+          'input, textarea': { fontSize: 'max(16px, 1em) !important' },
+        },
         // No text selection anywhere on the site...
         body: { backgroundColor: dmf.bg, userSelect: 'none', WebkitUserSelect: 'none' },
         // ...except in text fields (e.g. deck search), so typing and editing still work.

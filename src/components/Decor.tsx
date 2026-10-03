@@ -143,6 +143,7 @@ export function NotchButton({
         component="span"
         sx={{
           display: 'block',
+          textAlign: 'center',
           px: { xs: 3, md: 4 },
           py: 1.5,
           fontFamily: fonts.ui,

@@ -86,12 +86,13 @@ export default function Hero({
                 <Markdown>{intro}</Markdown>
               </Box>
             )}
-            <Stack direction="row" sx={{ gap: 2.5, flexWrap: "wrap" }}>
+            {/* Both buttons as wide as the wider one: side by side, or stacked on phones */}
+            <Box sx={{ display: "inline-grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 2.5 }}>
               <NotchButton href="/decks">Browse Decks</NotchButton>
               <NotchButton href="/rulings" variant="ghost">
                 Read Rulings
               </NotchButton>
-            </Stack>
+            </Box>
           </Box>
           {/* Click-to-flip cards (desktop only). Shown face-down while the card list loads, flipped up
               once it and the images are in; left out when there are no cards at all (no decks). */}

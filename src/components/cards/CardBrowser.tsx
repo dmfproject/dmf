@@ -11,6 +11,7 @@ import { useTheme } from '@mui/material/styles';
 import { dmf, fonts } from '@/theme';
 import { SlashLabel } from '../Decor';
 import { cardText } from '@/lib/fileServer';
+import ScrollArea from './ScrollArea';
 
 /**
  * Card grid + card info panel, shared by the deck pages and the errata page.
@@ -207,7 +208,7 @@ function useCardTexts(ids: string[]): Texts {
 }
 
 /** Big image + card text for the selected card. */
-function CardInfo({ card, images, texts }: Lookup & { card: string | null }) {
+function CardInfo({ card, images, texts, dragScroll = false }: Lookup & { card: string | null; /** Phones: draggable scroll indicator */ dragScroll?: boolean }) {
   if (!card) {
     return (
       <Typography sx={{ color: dmf.textMuted, fontStyle: 'italic', textAlign: 'center', py: 6 }}>
@@ -216,15 +217,27 @@ function CardInfo({ card, images, texts }: Lookup & { card: string | null }) {
     );
   }
   const text = texts[card];
+  const textBody = (
+    <>
+      {isErrata(card) && <ErrataBanner />}
+      {text === undefined ? (
+        <Typography sx={{ fontSize: '0.95rem', color: dmf.textMuted, fontStyle: 'italic' }}>Loading card text…</Typography>
+      ) : text ? (
+        <CardText text={text} />
+      ) : (
+        <Typography sx={{ fontSize: '0.95rem', color: dmf.textMuted, fontStyle: 'italic' }}>No card text.</Typography>
+      )}
+    </>
+  );
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
       <Box
         sx={{
           flexShrink: 0,
           width: '100%',
-          maxWidth: 220,
+          maxWidth: dragScroll ? 198 : 220, // phones: 10% smaller, the text box gets the height
           mx: 'auto',
-          mt: 2,
+          mt: dragScroll ? 0 : 2, // phones: the sheet's top padding matches the card → text gap
           filter: `drop-shadow(0 14px 24px rgba(0,0,0,0.55)) drop-shadow(0 0 20px ${dmf.ice}22)`,
         }}
       >
@@ -245,27 +258,26 @@ function CardInfo({ card, images, texts }: Lookup & { card: string | null }) {
           <SlashLabel>Card text</SlashLabel>
         </Box>
         {/* key={card}: a new card gets a fresh text box, so its scroll starts at the top */}
-        <Box
-          key={card}
-          sx={{
-            px: 2.5,
-            pb: 2.5,
-            flex: 1,
-            minHeight: 0,
-            overflowY: 'auto',
-            scrollbarWidth: 'thin',
-            scrollbarColor: `${dmf.ice}55 transparent`,
-          }}
-        >
-          {isErrata(card) && <ErrataBanner />}
-          {text === undefined ? (
-            <Typography sx={{ fontSize: '0.95rem', color: dmf.textMuted, fontStyle: 'italic' }}>Loading card text…</Typography>
-          ) : text ? (
-            <CardText text={text} />
-          ) : (
-            <Typography sx={{ fontSize: '0.95rem', color: dmf.textMuted, fontStyle: 'italic' }}>No card text.</Typography>
-          )}
-        </Box>
+        {dragScroll ? (
+          <ScrollArea key={card} sx={{ flex: 1, pl: 2.5, pr: 0.5, pb: 1 }}>
+            <Box sx={{ pb: 1.5 }}>{textBody}</Box>
+          </ScrollArea>
+        ) : (
+          <Box
+            key={card}
+            sx={{
+              px: 2.5,
+              pb: 2.5,
+              flex: 1,
+              minHeight: 0,
+              overflowY: 'auto',
+              scrollbarWidth: 'thin',
+              scrollbarColor: `${dmf.ice}55 transparent`,
+            }}
+          >
+            {textBody}
+          </Box>
+        )}
       </Box>
     </Box>
   );
@@ -390,15 +402,18 @@ export default function CardBrowser({
         anchor="bottom"
         open={!desktop && sheetOpen}
         onClose={() => setSheetOpen(false)}
-        slotProps={{ paper: { sx: { bgcolor: dmf.bg, backgroundImage: 'none', maxHeight: '88vh', p: 2.5, pt: 1 } } }}
+        slotProps={{ paper: { sx: { bgcolor: dmf.bg, backgroundImage: 'none', maxHeight: '88vh', p: 2.5, pt: 3 } } }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <IconButton aria-label="Close card" onClick={() => setSheetOpen(false)} sx={{ color: dmf.text }}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
+        {/* Close button level with the top of the card (pt 3 = the card → text gap) */}
+        <IconButton
+          aria-label="Close card"
+          onClick={() => setSheetOpen(false)}
+          sx={{ position: 'absolute', top: 16, right: 12, zIndex: 1, color: dmf.text }}
+        >
+          <CloseIcon />
+        </IconButton>
         <Box sx={{ height: '75vh' }}>
-          <CardInfo card={selected?.card ?? null} images={images} texts={texts} />
+          <CardInfo card={selected?.card ?? null} images={images} texts={texts} dragScroll />
         </Box>
       </Drawer>
     </>
