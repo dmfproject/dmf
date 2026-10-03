@@ -45,9 +45,36 @@ async function readJson<T>(file: string): Promise<T[]> {
   return Array.isArray(data) ? (data as T[]) : [];
 }
 
-/** content/decks.json as it is (no covers or dates resolved): cheap, for ids and titles. */
-export function readDecksJson(): Promise<DeckJson[]> {
-  return readJson<DeckJson>('decks.json');
+/** Whether an update is out: its date (UTC midnight) is today or earlier in UTC. A bad date counts as out. */
+function isReleased(u: UpdateJson): boolean {
+  return parseDate(u.date ?? '') <= Date.now();
+}
+
+/** content/updates.json without updates dated in the future (UTC). */
+async function readUpdatesJson(): Promise<UpdateJson[]> {
+  return (await readJson<UpdateJson>('updates.json')).filter(isReleased);
+}
+
+/** Decks and updates that are out: decks whose update is dated in the future (UTC) are left out. */
+async function readReleased(): Promise<{ decks: DeckJson[]; updates: UpdateJson[]; hiddenDeckIds: Set<string> }> {
+  const [decks, allUpdates] = await Promise.all([readJson<DeckJson>('decks.json'), readJson<UpdateJson>('updates.json')]);
+  const future = new Set(allUpdates.filter((u) => !isReleased(u)).map((u) => String(u.id)));
+  const hidden = (d: DeckJson) => future.has(String(d.update_id ?? ''));
+  return {
+    decks: decks.filter((d) => !hidden(d)),
+    updates: allUpdates.filter(isReleased),
+    hiddenDeckIds: new Set(decks.filter(hidden).map((d) => d.id)),
+  };
+}
+
+/** content/decks.json (released decks only, no covers or dates resolved): cheap, for ids and titles. */
+export async function readDecksJson(): Promise<DeckJson[]> {
+  return (await readReleased()).decks;
+}
+
+/** Whether a deck is listed but its update is dated in the future (UTC), so it must not be shown yet. */
+export async function isUnreleasedDeck(id: string): Promise<boolean> {
+  return (await readReleased()).hiddenDeckIds.has(id);
 }
 
 /**
@@ -74,7 +101,7 @@ async function resolveImage(deck: DeckJson): Promise<string | null> {
 
 /** Decks from content/decks.json (file server), newest first. A deck's date comes from its update (update_id). */
 export async function getDecks(): Promise<Deck[]> {
-  const [raw, updates] = await Promise.all([readJson<DeckJson>('decks.json'), readJson<UpdateJson>('updates.json')]);
+  const { decks: raw, updates } = await readReleased();
   const covers = await Promise.all(raw.map((d) => resolveImage(d)));
   const dateByUpdate = new Map(updates.map((u) => [String(u.id), u.date]));
   const now = Date.now();
@@ -125,7 +152,7 @@ export async function getContentText(file: string): Promise<string> {
 
 /** Updates from content/updates.json (+ each one's .md text), newest first. */
 export async function getUpdates(): Promise<Update[]> {
-  const raw = await readJson<UpdateJson>('updates.json');
+  const raw = await readUpdatesJson();
   const updates = await Promise.all(
     raw.map(async (u) => ({
       ...u,
@@ -136,35 +163,52 @@ export async function getUpdates(): Promise<Update[]> {
   return updates.sort((a, b) => b.timestamp - a.timestamp);
 }
 
-/** The latest update, for the note on the Main page. */
+/** How many days before an update's date the Main page announces it. */
+const ANNOUNCE_DAYS = 5;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** The note on the Main page: an update coming soon, or the latest one released. */
 export type UpdateNews = {
+  /** 'upcoming': dated within the next 5 days; 'released': out, and under 30 days old */
+  kind: 'upcoming' | 'released';
   id: string;
   title: string;
   date: string;
-  /** Names of the decks released in it */
+  /** Names of the decks released in it (empty for 'upcoming') */
   decks: string[];
-  /** Shown while now < until (the update's date + 30 days) */
+  /** Shown while now < until: the update's date for 'upcoming', the date + 30 days for 'released' */
   until: number;
-  /** Whether it was within those 30 days when the site was built */
-  recent: boolean;
 };
 
 /**
- * The latest update (by date) with its decks, or null if there's nothing to announce: no updates,
- * or only one (the first release isn't news).
+ * The note for the Main page, in order:
+ * 1. the soonest future update dated within the next 5 days (UTC)
+ * 2. the latest released update, if it's under 30 days old (and isn't the first release)
+ * 3. nothing (null)
  */
 export async function getLatestUpdateNews(): Promise<UpdateNews | null> {
-  const [updates, decks] = await Promise.all([getUpdates(), readJson<DeckJson>('decks.json')]);
-  if (updates.length < 2) return null;
+  const now = Date.now();
+  const all = await readJson<UpdateJson>('updates.json');
+  const upcoming = all
+    .map((u) => ({ u, ts: parseDate(u.date ?? '') }))
+    .filter(({ ts }) => ts > now && ts - now <= ANNOUNCE_DAYS * DAY_MS)
+    .sort((a, b) => a.ts - b.ts)[0];
+  if (upcoming) {
+    return { kind: 'upcoming', id: String(upcoming.u.id), title: upcoming.u.title ?? '', date: upcoming.u.date, decks: [], until: upcoming.ts };
+  }
+
+  const [updates, decks] = await Promise.all([getUpdates(), readDecksJson()]);
+  if (updates.length < 2) return null; // the first release isn't news
   const latest = updates.find((u) => u.timestamp > 0); // getUpdates() is newest first
   if (!latest) return null;
-  const until = latest.timestamp + NEW_FOR_DAYS * 24 * 60 * 60 * 1000;
+  const until = latest.timestamp + NEW_FOR_DAYS * DAY_MS;
+  if (now >= until) return null;
   return {
+    kind: 'released',
     id: String(latest.id),
     title: latest.title ?? '',
     date: latest.date,
     decks: decks.filter((d) => String(d.update_id ?? '') === String(latest.id)).map((d) => d.title),
     until,
-    recent: Date.now() < until,
   };
 }

@@ -9,17 +9,22 @@ import { dmf, fonts } from '@/theme';
 import type { UpdateNews } from '@/lib/content';
 
 /**
- * Main page note about the latest update, shown for 30 days after its date. The built page
- * decides with the build date; in the browser it's re-checked against today, so the note goes
- * away on time even without a rebuild.
+ * Main page note: an update coming within 5 days ("... will be released on ..."), or the latest
+ * update for 30 days after its date. Hidden once `until` passes while the page is open.
  */
 export default function UpdateNote({ news }: { news: UpdateNews }) {
-  const [show, setShow] = useState(news.recent);
-  useEffect(() => setShow(Date.now() < news.until), [news.until]);
+  const [show, setShow] = useState(true);
+  useEffect(() => {
+    const left = news.until - Date.now();
+    if (left <= 0) return setShow(false);
+    const t = setTimeout(() => setShow(false), Math.min(left, 2 ** 31 - 1));
+    return () => clearTimeout(t);
+  }, [news.until]);
   if (!show) return null;
 
   const name = news.title.trim();
   const decks = news.decks.length;
+  const upcoming = news.kind === 'upcoming';
 
   return (
     // Full-width strip laid over the top of the page (height 0 wrapper), so it doesn't push the content down
@@ -38,9 +43,9 @@ export default function UpdateNote({ news }: { news: UpdateNews }) {
       >
       <Container maxWidth="lg">
         <Box
-          component={NextLink}
-          href="/decks"
+          {...(upcoming ? { component: 'p' as const } : { component: NextLink, href: '/decks' })}
           sx={{
+            m: 0,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -57,6 +62,15 @@ export default function UpdateNote({ news }: { news: UpdateNews }) {
             '&:hover .arrow': { transform: 'translateX(3px)' },
           }}
         >
+          {upcoming ? (
+            // "Ancient Legacy update will be released on 05.10.2026!"
+            <Box component="span">
+              <Box component="span" sx={{ color: dmf.orange }}>{name ? `${name} update` : 'New update'}</Box>
+              {' will be released on '}
+              <Box component="span" sx={{ color: dmf.orange }}>{news.date}</Box>!
+            </Box>
+          ) : (
+          <>
           {/* With a name: "NEW// Ancient Legacy update ..."; without: "NEW UPDATE// ..." */}
           <Box component="span" sx={{ fontFamily: fonts.display, fontWeight: 700, color: dmf.orange, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
             {name ? 'New' : 'New update'}
@@ -72,6 +86,8 @@ export default function UpdateNote({ news }: { news: UpdateNews }) {
             {decks > 0 && ` · ${decks} new deck${decks === 1 ? '' : 's'}`}
           </Box>
           <ArrowForwardIcon className="arrow" sx={{ fontSize: '1rem', color: dmf.orange, transition: 'transform 150ms' }} />
+          </>
+          )}
         </Box>
         </Container>
       </Box>

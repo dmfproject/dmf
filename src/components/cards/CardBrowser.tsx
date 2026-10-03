@@ -60,7 +60,7 @@ function usePanelHeight(enabled: boolean) {
 /** Cards with ids 900000000–900009999 are Vault Format errata (modified versions of official cards). */
 export const isErrata = (card: string) => /^90000\d{4}$/.test(card);
 
-/** Small "Vault Format" tag shown on erratum cards in the grid. */
+/** Small "E" (erratum) tag shown on erratum cards in the grid. */
 function ErrataTag() {
   return (
     <Box
@@ -82,7 +82,7 @@ function ErrataTag() {
         pointerEvents: 'none',
       }}
     >
-      VAULT
+      E
     </Box>
   );
 }
@@ -347,7 +347,7 @@ export default function CardBrowser({
   errataTags = true,
 }: Omit<Lookup, 'texts'> & {
   sections: CardSection[];
-  /** Show the small "Vault Format" tag on erratum cards (off on the errata page, where every card is one). */
+  /** Show the small "E" tag on erratum cards (off on the errata page, where every card is one). */
   errataTags?: boolean;
 }) {
   const theme = useTheme();

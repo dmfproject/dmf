@@ -1,4 +1,4 @@
-import { readDecksJson } from './content';
+import { isUnreleasedDeck, readDecksJson } from './content';
 import { cardImageUrl, fetchText } from './fileServer';
 
 export type DeckList = {
@@ -32,6 +32,7 @@ function prettify(id: string) {
 /** Load decks/{id}.ydk from the file server (card ids + image URLs), or null if the deck doesn't exist. Card texts load later, on the page. */
 export async function getDeckList(id: string): Promise<DeckList | null> {
   if (!/^[\w-]+$/.test(id)) return null; // keep the path inside decks/
+  if (await isUnreleasedDeck(id)) return null; // its update is dated in the future
 
   const ydk = await fetchText(`decks/${id}.ydk`);
   if (ydk === null) return null;

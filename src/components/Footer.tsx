@@ -24,7 +24,7 @@ export default function Footer() {
               A fan-made Yu-Gi-Oh! format.
             </Typography>
           </Box>
-          <Stack direction="row" sx={{ gap: 3 }}>
+          <Stack direction="row" sx={{ flexWrap: 'wrap', columnGap: 3, rowGap: 1.5, minWidth: 0, maxWidth: '100%' }}>
             {NAV_ITEMS.map((item) => (
               <Box
                 key={item.href}
@@ -38,6 +38,7 @@ export default function Footer() {
                   textTransform: 'uppercase',
                   color: dmf.textMuted,
                   textDecoration: 'none',
+                  whiteSpace: 'nowrap',
                   '&:hover': { color: dmf.orange },
                 }}
               >
